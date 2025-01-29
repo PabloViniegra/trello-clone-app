@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthorization } from "@/auth/composables/useAuthorization";
 import { useValidation } from "@/shared/composables/useValidation";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 // Composables
 const {
@@ -19,16 +19,29 @@ const {
   isPendingRegister,
 } = useAuthorization();
 
-// Computed validations
-const passwordStatus = computed(() =>
-  validate(password.value, [required, complexPassword])
-);
-const usernameStatus = computed(() => validate(username.value, [required]));
-const emailStatus = computed(() =>
-  validate(email.value, [required, emailValidation])
-);
+// Reactive properties
+const usernameTouched = ref(false);
+const emailTouched = ref(false);
+const passwordTouched = ref(false);
+const confirmPasswordTouched = ref(false);
 
+// Computed validations
+const usernameStatus = computed(() =>
+  usernameTouched.value ? validate(username.value, [required]) : { valid: true }
+);
+const emailStatus = computed(() =>
+  emailTouched.value
+    ? validate(email.value, [required, emailValidation])
+    : { valid: true }
+);
+const passwordStatus = computed(() =>
+  passwordTouched.value
+    ? validate(password.value, [required, complexPassword])
+    : { valid: true }
+);
 const confirmPasswordStatus = computed(() => {
+  if (!confirmPasswordTouched.value) return { valid: true };
+
   const isRequiredValid = required(confirmPassword.value).valid;
   const isMatchValid = confirmPassword.value === password.value;
 
@@ -44,14 +57,16 @@ const confirmPasswordStatus = computed(() => {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-100">
-    <div class="w-[700px] bg-white shadow-lg rounded-lg p-8">
-      <h2 class="text-3xl font-bold text-primary text-center mb-6">
+  <div class="flex min-h-screen items-center justify-center bg-gray-100 px-6">
+    <div
+      class="w-full sm:w-[500px] md:w-[600px] lg:w-[700px] max-w-xl bg-white shadow-lg rounded-lg p-12 sm:p-6 mt-16 sm:mt-0"
+    >
+      <h2 class="text-xl sm:text-3xl font-bold text-primary text-center mb-6">
         Create an Account
       </h2>
       <form @submit.prevent="registerMutation()" class="space-y-4">
         <div>
-          <label class="block text-lg font-medium text-gray-700"
+          <label class="block text-md sm:text-lg font-medium text-gray-700"
             >Username</label
           >
           <input
@@ -60,26 +75,28 @@ const confirmPasswordStatus = computed(() => {
             placeholder="Enter your username"
             class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition"
             :class="{ 'border-red-500': !usernameStatus.valid }"
+            @blur="usernameTouched = true"
           />
           <p v-if="!usernameStatus.valid" class="text-red-500 text-sm mt-1">
             {{ usernameStatus.message }}
           </p>
         </div>
         <div>
-          <label class="block text-lg font-medium text-gray-700">Email</label>
+          <label class="block text-md sm:text-lg font-medium text-gray-700">Email</label>
           <input
             v-model="email"
             type="email"
             placeholder="Enter your email"
             class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition"
             :class="{ 'border-red-500': !emailStatus.valid }"
+            @blur="emailTouched = true"
           />
           <p v-if="!emailStatus.valid" class="text-red-500 text-sm mt-1">
             {{ emailStatus.message }}
           </p>
         </div>
         <div>
-          <label class="block text-lg font-medium text-gray-700"
+          <label class="block text-md sm:text-lg font-medium text-gray-700"
             >Password</label
           >
           <input
@@ -88,13 +105,14 @@ const confirmPasswordStatus = computed(() => {
             placeholder="Create a password"
             class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition"
             :class="{ 'border-red-500': !passwordStatus.valid }"
+            @blur="passwordTouched = true"
           />
           <p v-if="!passwordStatus.valid" class="text-red-500 text-sm mt-1">
             {{ passwordStatus.message }}
           </p>
         </div>
         <div>
-          <label class="block text-lg font-medium text-gray-700"
+          <label class="block text-md sm:text-lg font-medium text-gray-700"
             >Confirm Password</label
           >
           <input
@@ -103,6 +121,7 @@ const confirmPasswordStatus = computed(() => {
             placeholder="Confirm your password"
             class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition"
             :class="{ 'border-red-500': !confirmPasswordStatus.valid }"
+            @blur="confirmPasswordTouched = true"
           />
           <p
             v-if="!confirmPasswordStatus.valid"
@@ -151,8 +170,9 @@ const confirmPasswordStatus = computed(() => {
         <router-link
           to="/login"
           class="text-primary font-semibold hover:underline"
-          >Sign in</router-link
         >
+          Sign in
+        </router-link>
       </p>
     </div>
   </div>

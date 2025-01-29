@@ -5,7 +5,6 @@ import { ref } from "vue";
 import CreateColumnModal from "@/column/components/CreateColumnModal.vue";
 import BoardColumn from "@/dashboard/components/BoardColumn.vue";
 
-
 // Props
 interface Props {
   columns: Column[];
@@ -29,7 +28,7 @@ const {
   boardId,
   isPendingPatch,
   patchMutation,
-  deleteMutation
+  deleteMutation,
 } = defineProps<Props>();
 
 const isModalOpen = ref(false);
@@ -39,11 +38,12 @@ const deleteColumn = (columnId: string) => {
 };
 </script>
 <template>
-  <main>
+  <main class="flex flex-col h-full w-full">
     <section
-      class="flex flex-row justify-start w-full overflow-x-auto bg-zinc-200 my-2 rounded-md"
+      class="flex flex-row justify-start w-full overflow-x-auto bg-zinc-200 my-2 rounded-md scrollbar-thin scrollbar-thumb-border/50 hover:scrollbar-thumb-border/70"
     >
-      <div class="flex flex-row gap-4 p-4">
+      <div class="flex flex-row gap-4 p-4 min-w-max flex-nowrap">
+        <!-- Botón para crear una nueva columna -->
         <article
           class="w-[300px] h-screen overflow-y-auto bg-border/60 outline-1 outline-white m-3 rounded-md flex-shrink-0"
         >
@@ -66,6 +66,7 @@ const deleteColumn = (columnId: string) => {
           :isPendingPatch="isPendingPatch"
           :patchMutation="patchMutation"
           @delete-column="deleteColumn"
+          class="w-[300px] h-screen flex-shrink-0"
         />
       </div>
     </section>

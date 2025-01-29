@@ -29,12 +29,21 @@ const passwordStatus = computed(() => {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-100">
-    <div class="w-[700px] bg-white shadow-lg rounded-lg p-8">
-      <h2 class="text-3xl font-bold text-primary text-center mb-6">Login</h2>
-      <form @submit.prevent="loginMutation()" class="space-y-4">
-        <div>
-          <label class="block text-lg font-medium text-gray-700">Email</label>
+  <div class="flex min-h-screen items-center justify-center bg-gray-100 px-6">
+    <div
+      class="w-full md:w-[500px] lg:w-[600px] xl:w-[700px] bg-white shadow-xl rounded-lg p-8"
+    >
+      <h2 class="text-2xl md:text-3xl font-bold text-primary text-center mb-6">
+        Login
+      </h2>
+      <form
+        @submit.prevent="loginMutation()"
+        class="space-y-6 flex flex-col items-center"
+      >
+        <div class="w-full">
+          <label class="block text-sm md:text-lg font-medium text-gray-700"
+            >Email</label
+          >
           <input
             v-model="email"
             type="email"
@@ -43,12 +52,15 @@ const passwordStatus = computed(() => {
             :class="{ 'border-red-500': !emailStatus.valid }"
             @blur="emailTouched = true"
           />
-          <p v-if="!emailStatus.valid" class="text-red-500 text-sm mt-1">
+          <p
+            v-if="!emailStatus.valid"
+            class="text-red-500 text-xs md:text-sm mt-1"
+          >
             {{ emailStatus.message }}
           </p>
         </div>
-        <div>
-          <label class="block text-lg font-medium text-gray-700"
+        <div class="w-full">
+          <label class="block text-sm md:text-lg font-medium text-gray-700"
             >Password</label
           >
           <input
@@ -59,18 +71,23 @@ const passwordStatus = computed(() => {
             :class="{ 'border-red-500': !passwordStatus.valid }"
             @blur="passwordTouched = true"
           />
-          <p v-if="!passwordStatus.valid" class="text-red-500 text-sm mt-1">
+          <p
+            v-if="!passwordStatus.valid"
+            class="text-red-500 text-xs md:text-sm mt-1"
+          >
             {{ passwordStatus.message }}
           </p>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 w-full">
           <input
             v-model="rememberMe"
             type="checkbox"
             id="rememberMe"
             class="cursor-pointer w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
           />
-          <label for="rememberMe" class="text-sm text-gray-600 cursor-pointer"
+          <label
+            for="rememberMe"
+            class="text-sm md:text-base text-gray-600 cursor-pointer"
             >Remember Me</label
           >
         </div>
@@ -105,7 +122,7 @@ const passwordStatus = computed(() => {
           <span v-if="!isPendingLogin">Login</span>
         </button>
       </form>
-      <p class="text-center mt-4 text-gray-600">
+      <p class="text-center mt-6 text-gray-600 text-sm md:text-base">
         Don't have an account?
         <router-link
           to="/register"
