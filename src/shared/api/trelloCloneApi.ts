@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 export const trelloCloneApi = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'https://trello-clone-api-rest.onrender.com',
 });
 
 trelloCloneApi.interceptors.request.use((config) => {
