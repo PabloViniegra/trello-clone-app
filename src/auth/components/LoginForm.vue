@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthorization } from "@/auth/composables/useAuthorization";
 import { useValidation } from "@/shared/composables/useValidation";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 // Composables
 const {

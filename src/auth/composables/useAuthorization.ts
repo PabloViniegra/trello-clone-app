@@ -104,7 +104,7 @@ export const useAuthorization = () => {
 
   watch(isErrorLogin, () => {
     if (isErrorLogin.value && errorLogin.value) {
-      toaster.error(errorLogin.value.message);
+      toaster.error(errorLogin.value.message || "Invalid credentials");
     }
   });
 

@@ -15,7 +15,8 @@ trelloCloneApi.interceptors.request.use((config) => {
     if (!TOKEN) {
         console.error("⛔ Interceptor: No hay token en localStorage. Redirigiendo al login...");
         const router = useRouter();
-        router.push({ name: "Login" });
+        if (router)
+            router.push({ name: "Login" });
         throw new Error("UnauthorizedError");
     }
 
@@ -32,7 +33,8 @@ trelloCloneApi.interceptors.response.use(
         localStorage.removeItem("user");
 
         const router = useRouter();
-        router.push({ name: "Login" });
+        if (router)
+            router.push({ name: "Login" });
       }
       return Promise.reject(error);
     }
